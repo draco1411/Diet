@@ -5,18 +5,32 @@ import os
 from FOOD_LIST import FOOD_LIST
 
 # Time retrieval and formatting
-d = dt.date.today()
-date = d.strftime("%m-%d-%Y")
+date = dt.date.today().strftime("%m-%d-%Y")
+
+
+def log_writer(food):
+    row = {f"{date}": food}
+    with open("/Users/jackbrolin/diet/master_log.json", "r") as file:
+        data = json.load(file)
+    if any(date in entry for entry in data):  # instantiated
+        for entry in data:
+            if date in entry:
+                part = [el1 + el2 for el1, el2 in zip(entry[f"{date}"], food)]
+                entry[f"{date}"] = part
+            break
+        with open("/Users/jackbrolin/diet/master_log.json", "w") as file:
+            json.dump(data, file)
+    else:  # Not instantiated
+        with open("/Users/jackbrolin/diet/master_log.json", "r") as file:
+            data = json.load(file)
+        data.append(row)
+        with open("/Users/jackbrolin/diet/master_log.json", "r") as file:
+            json.dump(data, file)
 
 
 def quick_add():
-    indicator = input("Quick add:  ")
-    N_vector = FOOD_LIST[indicator]
-    row = {"date": date, "N_vector": N_vector}
-    with open('daily_log.json', 'a') as file:
-        json.dump(row, file)
-        file.write('\n')
-    return None
+    indicator = str(input("Number:  "))
+    log_writer(FOOD_LIST[indicator])
 
 
 def manual_entry():
@@ -25,68 +39,34 @@ def manual_entry():
     carbs = int(input("Carbs:  "))
     protein = int(input("Protein:  "))
     N_vector = [cals, fat, carbs, protein]
-    row = {"date": date, "N_vector": N_vector}
-    with open('daily_log.json', 'a') as file:
-        json.dump(row, file)
-        file.write('\n')
-    return None
-
-
-def aux_file_writer():
-    with open('/Users/jackbrolin/diet/master_log.json', 'a') as file:
-        for i in range(1,  31):
-            current_date = dt.date(2024, 4, i)
-            row = {"date": str(current_date.strftime("%m-%d-%Y")), "N-vector":
-                   [0, 0, 0, 0]}
-            json.dump(row, file)
-            file.write('\n')
-    return None
+    log_writer(N_vector)
 
 
 def weigh_in():
-    daily_weight = int(input("Weight:  "))
-    row = {"date": date, "weight": daily_weight}
-    with open('weight.json', 'a') as file:
-        json.dump(row, file)
-        file.write('\n')
-    return None
+    weight = int(input("Weight:  "))
+    row = {f"{date}": weight}
+    with open("/Users/jackbrolin/diet/weight.json", "r") as file:
+        data = json.load(file)
+    if any(date in entry for entry in data):
+        print("already done today")
+    else:
+        with open("/Users/jackbrolin/diet/weight.json", "r") as file:
+            data = json.load(file)
+        data.append(row)
+        with open("/Users/jackbrolin/diet/weight.json", "w") as file:
+            json.dump(data, file, indent=2)
 
 
-def get_weight():
-    with open('/Users/jackbrolin/diet/weight.json', 'r') as file:
-        data = [json.loads(line) for line in file]
-        daily_weight = [data[i]['weight'] for i in range(len(data))]
-        print(daily_weight)
-    return None
-
-
-def get_daily_food():
-    with open('/Users/jackbrolin/diet/daily_log.json', 'r') as file:
-        data = [json.loads(line) for line in file]
-        partial = [data[i]['N_vector'] for i in range(len(data))]
-        total_cals = [partial[i][0] for i in range(len(partial))]
-        print(sum(total_cals))
-    return None
-
-
-def stats():
-    os.system('clear')
-    get_weight()
-    get_daily_food()
-    return None
-
-
-# menu_selector = [quick_add, manual_entry, weigh_in, stats]
+menu_selector = [quick_add, manual_entry, weigh_in]
 
 os.system('clear')
-# menu_selection = int(input("Select an option: \n"
-#                            "1: Quick add. \n"
-#                            "2: Manual Entry \n"
-#                            "3: Weigh In \n"
-#                            "4: Stats \n"
-#                            "Select:  "))
+menu_selection = int(input("Select an option: \n"
+                           "1: Quick add. \n"
+                           "2: Manual Entry \n"
+                           "3: Weigh In \n"
+                           "4: Stats \n"
+                           "Select:  "))
 
-aux_file_writer()
 
-# function = menu_selector[menu_selection - 1]
-# function()
+function = menu_selector[menu_selection - 1]
+function()
