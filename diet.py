@@ -12,7 +12,7 @@ def log_writer(food):
     row = {f"{date}": food}
     with open("/Users/jackbrolin/diet/master_log.json", "r") as file:
         data = json.load(file)
-    if any(date in entry for entry in data):  # instantiated
+    if any(date in entry for entry in data):  # date indeed instantiated
         for entry in data:
             if date in entry:
                 part = [el1 + el2 for el1, el2 in zip(entry[f"{date}"], food)]
@@ -20,11 +20,11 @@ def log_writer(food):
             break
         with open("/Users/jackbrolin/diet/master_log.json", "w") as file:
             json.dump(data, file)
-    else:  # Not instantiated
+    else:  # date not instantiated
         with open("/Users/jackbrolin/diet/master_log.json", "r") as file:
             data = json.load(file)
         data.append(row)
-        with open("/Users/jackbrolin/diet/master_log.json", "r") as file:
+        with open("/Users/jackbrolin/diet/master_log.json", "w") as file:
             json.dump(data, file)
 
 
@@ -38,12 +38,11 @@ def manual_entry():
     fat = int(input("Fat:  "))
     carbs = int(input("Carbs:  "))
     protein = int(input("Protein:  "))
-    N_vector = [cals, fat, carbs, protein]
-    log_writer(N_vector)
+    log_writer([cals, fat, carbs, protein])
 
 
 def weigh_in():
-    weight = int(input("Weight:  "))
+    weight = float(input("Weight:  "))
     row = {f"{date}": weight}
     with open("/Users/jackbrolin/diet/weight.json", "r") as file:
         data = json.load(file)
@@ -68,5 +67,5 @@ menu_selection = int(input("Select an option: \n"
                            "Select:  "))
 
 
-function = menu_selector[menu_selection - 1]
-function()
+selcector_function = menu_selector[menu_selection - 1]
+selcector_function()
