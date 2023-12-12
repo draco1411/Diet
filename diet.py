@@ -3,34 +3,43 @@ import json
 import os
 # import shutil
 from FOOD_LIST import FOOD_LIST
+from FOOD_LIST import NAME_LIST
 
 # Time retrieval and formatting
 date = dt.date.today().strftime("%m-%d-%Y")
 
+weight_path = "/Users/jackbrolin/diet/weight.json"
+master_log_path = "/Users/jackbrolin/diet/master_log.json"
 
-def log_writer(food):
-    row = {f"{date}": food}
-    with open("/Users/jackbrolin/diet/master_log.json", "r") as file:
+
+def quick_add_list_printer():
+    os.system('clear')
+    for row in NAME_LIST:
+        print("{: <30} {: <30} {: <30}".format(*row))
+
+
+def log_writer(file_path: str, food: list) -> None:
+    with open(file_path, 'r') as file:
         data = json.load(file)
-    if any(date in entry for entry in data):  # date indeed instantiated
-        for entry in data:
-            if date in entry:
-                part = [el1 + el2 for el1, el2 in zip(entry[f"{date}"], food)]
-                entry[f"{date}"] = part
-            break
-        with open("/Users/jackbrolin/diet/master_log.json", "w") as file:
+    if data[-1]['date'] == date:
+        part = [x + y for x, y in zip(data[-1]['N_vector'], food)]
+        data[-1]['N_vector'] = part
+        print(f'Total N-Vector for {date}: {part}')
+        with open(file_path, 'w') as file:
             json.dump(data, file)
-    else:  # date not instantiated
-        with open("/Users/jackbrolin/diet/master_log.json", "r") as file:
-            data = json.load(file)
+    else:
+        row = {'date': f'{date}', 'N_vector': food}
         data.append(row)
-        with open("/Users/jackbrolin/diet/master_log.json", "w") as file:
+        with open(file_path, 'w') as file:
             json.dump(data, file)
+        print(f'Total N-vector for {date}: {food}')
+    return None
 
 
 def quick_add():
+    quick_add_list_printer()
     indicator = str(input("Number:  "))
-    log_writer(FOOD_LIST[indicator])
+    log_writer(master_log_path, FOOD_LIST[indicator])
 
 
 def manual_entry():
@@ -38,34 +47,40 @@ def manual_entry():
     fat = int(input("Fat:  "))
     carbs = int(input("Carbs:  "))
     protein = int(input("Protein:  "))
-    log_writer([cals, fat, carbs, protein])
+    log_writer(master_log_path, [cals, fat, carbs, protein])
 
 
 def weigh_in():
-    weight = float(input("Weight:  "))
-    row = {f"{date}": weight}
-    with open("/Users/jackbrolin/diet/weight.json", "r") as file:
+    with open(weight_path, 'r') as file:
         data = json.load(file)
-    if any(date in entry for entry in data):
-        print("already done today")
+    if data[-1]['date'] == date:
+        weight = data[-1]['weight']
+        print(f'Already done: on {date} you weigh {weight}')
     else:
-        with open("/Users/jackbrolin/diet/weight.json", "r") as file:
-            data = json.load(file)
+        value = float(input('Enter daily weight:  '))
+        row = {'date': f'{date}', 'weight': value}
         data.append(row)
-        with open("/Users/jackbrolin/diet/weight.json", "w") as file:
+        with open(weight_path, 'w') as file:
             json.dump(data, file, indent=2)
+    return None
 
 
-menu_selector = [quick_add, manual_entry, weigh_in]
-
-os.system('clear')
-menu_selection = int(input("Select an option: \n"
-                           "1: Quick add. \n"
-                           "2: Manual Entry \n"
-                           "3: Weigh In \n"
-                           "4: Stats \n"
-                           "Select:  "))
+def stats():
+    pass
 
 
-selcector_function = menu_selector[menu_selection - 1]
-selcector_function()
+if __name__ == "__main__":
+    os.system('clear')
+    menu = [
+        ['1', 'Quick Add'],
+        ['2', 'Manual Entry'],
+        ['3', 'Weight-in'],
+        ['4', 'Stats']
+    ]
+    for row in menu:
+        print("{: <20} {: <20}".format(*row))
+
+    menu_selection = int(input("Add value:  "))
+    menu_selector = [quick_add, manual_entry, weigh_in, stats]
+    function = menu_selector[menu_selection - 1]
+    function()
