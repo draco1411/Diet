@@ -15,7 +15,7 @@ master_log_path = "/Users/jackbrolin/diet/master_log.json"
 def quick_add_list_printer():
     os.system('clear')
     for row in NAME_LIST:
-        print("{: <30} {: <30} {: <30}".format(*row))
+        print("{: >30} {: <30} {: <30}".format(*row))
 
 
 def log_writer(file_path: str, food: list) -> None:
