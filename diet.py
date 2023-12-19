@@ -8,8 +8,8 @@ from FOOD_LIST import NAME_LIST
 # Time retrieval and formatting
 date = dt.date.today().strftime("%m-%d-%Y")
 
-weight_path = "/Users/jackbrolin/diet/weight.json"
-master_log_path = "/Users/jackbrolin/diet/master_log.json"
+weight_path = "/Users/draco/diet/weight.json"
+master_log_path = "/Users/draco/diet/master_log.json"
 
 
 def quick_add_list_printer():

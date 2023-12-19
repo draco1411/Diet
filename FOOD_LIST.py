@@ -4,8 +4,7 @@ FOOD_LIST = {
     "3": [450, 11, 75, 14],  # Standard Cereal
     "4": [310, 13, 44, 10],  # Bagel w/ Butter
     "5": [150, 8, 11, 8],  # 8oz milk!
-    "6": [105, 0, 27, 1],  # 1 Banana
-    "7":
+    "6": [105, 0, 27, 1]  # 1 Banana
 }
 
 NAME_LIST = [
