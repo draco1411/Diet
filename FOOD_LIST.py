@@ -1,3 +1,4 @@
+# Change the food list as 'regular' diet changes
 FOOD_LIST = {
     "1": [190, 4, 23, 16],  # Greek Yogurt w/ 20g Honey
     "2": [450, 20, 28, 44],  # P-Shake
@@ -7,6 +8,7 @@ FOOD_LIST = {
     "6": [105, 0, 27, 1]  # 1 Banana
 }
 
+# Update with FOOD_LIST changes 
 NAME_LIST = [
     ['1: ', 'Greek Yogurt w/ 20g Honey', '[190, 4, 23, 16]'],
     ['2: ', 'P-shake', '[450, 20, 28, 44]'],
