@@ -1,1 +1,1 @@
-[{"date": "xx-xx-xxxx", "N_vector": [x, x, x, x]}]  # with N-vector of the form [calories, fats, carbs, protein]
+[{"date": "xx-xx-xxxx", "N_vector": ["cals", "fats", "carbs", "protein"]}]
